@@ -1,0 +1,15 @@
+=== System Verification Check ===
+Timestamp: Thu Apr  2 12:17:50 PM IST 2026
+
+[0;32m[OK][0m openEMS found at: /usr/local/bin/openEMS
+[0;32m[OK][0m Python 3 installed: Python 3.12.3
+[0;32m[OK][0m pip available: pyenv: pip3: command not found
+
+The `pip3' command exists in these Python versions:
+  3.11.6
+
+Note: See 'pyenv help global' for tips on allowing multiple
+      Python versions to be found at the same time.
+[1;33m[WARN][0m LD_LIBRARY_PATH does not include /usr/local/lib (may cause runtime failures)
+
+Exit Code: 0
