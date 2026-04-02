@@ -1,0 +1,19 @@
+geometry:
+  grid_size: 15
+  pixel_size_mm: 1.2
+  overlap_ratio: 0.10
+  substrate_size_mm: 40.0
+substrate:
+  material: "Rogers 4350B"
+  thickness_mm: 0.508
+  dk: 3.66
+  loss_tangent: 0.004
+simulation:
+  freq_start_ghz: 2.0
+  freq_stop_ghz: 10.0
+  freq_bands_ghz: [[2.4, 3.0], [4.8, 6.0], [7.2, 9.0]]
+  points_per_band: 7
+generation:
+  target_connected_ratio: 0.80
+  dist_mean: 0.50
+  dist_std: 0.15

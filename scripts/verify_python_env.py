@@ -25,23 +25,26 @@ def log_and_print(message):
 # Status tracking
 critical_failed = False
 
-log_and_print("=" * 70)
+log_and_print("=" * 75)
 log_and_print("Python Environment Verification")
-log_and_print("=" * 70)
+log_and_print("=" * 75)
 log_and_print(f"Python Version: {sys.version}")
 log_and_print(f"Executable: {sys.executable}")
 log_and_print("")
 log_and_print("Library Status:")
-log_and_print("-" * 70)
+log_and_print("-" * 75)
+
+# Table format: [Status] Library Name                              Version
+status_results = []
 
 # Check critical: openEMS
 try:
     from openEMS import openEMS
     import openEMS as openems_module
     version = getattr(openems_module, '__version__', 'unknown')
-    log_and_print(f"[OK]   {'openEMS':<40} v{version}")
+    status_results.append(("[OK]", "openEMS", version))
 except ImportError as e:
-    log_and_print(f"[FAIL] {'openEMS':<40} IMPORT ERROR")
+    status_results.append(("[FAIL]", "openEMS", "IMPORT ERROR"))
     critical_failed = True
 
 # Check critical: CSXCAD
@@ -49,58 +52,64 @@ try:
     from CSXCAD import ContinuousStructure
     import CSXCAD as csxcad_module
     version = getattr(csxcad_module, '__version__', 'unknown')
-    log_and_print(f"[OK]   {'CSXCAD':<40} v{version}")
+    status_results.append(("[OK]", "CSXCAD", version))
 except ImportError as e:
-    log_and_print(f"[FAIL] {'CSXCAD':<40} IMPORT ERROR")
+    status_results.append(("[FAIL]", "CSXCAD", "IMPORT ERROR"))
     critical_failed = True
 
 # Check supporting: numpy
 try:
     import numpy
-    log_and_print(f"[OK]   {'numpy':<40} v{numpy.__version__}")
+    status_results.append(("[OK]", "numpy", numpy.__version__))
 except ImportError:
-    log_and_print(f"[WARN] {'numpy':<40} NOT INSTALLED")
+    status_results.append(("[WARN]", "numpy", "NOT INSTALLED"))
 
 # Check supporting: scipy
 try:
     import scipy
-    log_and_print(f"[OK]   {'scipy':<40} v{scipy.__version__}")
+    status_results.append(("[OK]", "scipy", scipy.__version__))
 except ImportError:
-    log_and_print(f"[WARN] {'scipy':<40} NOT INSTALLED")
+    status_results.append(("[WARN]", "scipy", "NOT INSTALLED"))
 
 # Check supporting: matplotlib
 try:
     import matplotlib
-    log_and_print(f"[OK]   {'matplotlib':<40} v{matplotlib.__version__}")
+    status_results.append(("[OK]", "matplotlib", matplotlib.__version__))
 except ImportError:
-    log_and_print(f"[WARN] {'matplotlib':<40} NOT INSTALLED")
+    status_results.append(("[WARN]", "matplotlib", "NOT INSTALLED"))
 
 # Check supporting: pytest
 try:
     import pytest
-    log_and_print(f"[OK]   {'pytest':<40} v{pytest.__version__}")
+    status_results.append(("[OK]", "pytest", pytest.__version__))
 except ImportError:
-    log_and_print(f"[WARN] {'pytest':<40} NOT INSTALLED")
+    status_results.append(("[WARN]", "pytest", "NOT INSTALLED"))
+
+# Print formatted results
+for status, library, version in status_results:
+    log_and_print(f"{status:<8} {library:<35} {version}")
 
 # Print special warnings for OpenEMS/CSXCAD if they failed
 if critical_failed:
     log_and_print("")
-    log_and_print("=" * 70)
+    log_and_print("=" * 75)
     log_and_print("⚠️  CRITICAL WARNING: OpenEMS/CSXCAD Import Failed")
-    log_and_print("=" * 70)
+    log_and_print("=" * 75)
     log_and_print("")
     log_and_print("OpenEMS and CSXCAD are NOT pip-installable.")
-    log_and_print("They require manual compilation from source.")
+    log_and_print("They require manual compilation from source code.")
     log_and_print("")
-    log_and_print("To fix this:")
-    log_and_print("1. Clone and compile OpenEMS: https://github.com/thliebig/openEMS")
-    log_and_print("2. Clone and compile CSXCAD: https://github.com/thliebig/CSXCAD")
-    log_and_print("3. Ensure PYTHONPATH includes: /usr/local/lib/python3/dist-packages")
+    log_and_print("To resolve:")
+    log_and_print("  1. Clone OpenEMS: https://github.com/thliebig/openEMS")
+    log_and_print("  2. Clone CSXCAD: https://github.com/thliebig/CSXCAD")
+    log_and_print("  3. Compile both using their build instructions")
+    log_and_print("  4. Python bindings generated via setup.py must be installed")
+    log_and_print("  5. Ensure PYTHONPATH includes compiled module paths")
     log_and_print("")
 
-log_and_print("-" * 70)
+log_and_print("-" * 75)
 log_and_print(f"Exit Code: {1 if critical_failed else 0}")
-log_and_print("=" * 70)
+log_and_print("=" * 75)
 
 log_output.close()
 

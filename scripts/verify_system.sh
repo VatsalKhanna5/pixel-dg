@@ -42,38 +42,55 @@ echo "=== System Verification Check ===" >> "$LOG_FILE"
 echo "Timestamp: $(date)" >> "$LOG_FILE"
 echo "" >> "$LOG_FILE"
 
-# 1. Check openEMS binary
+# 1. Check openEMS binary (case-sensitive)
 if command -v openEMS &> /dev/null; then
     OPENEMS_PATH=$(command -v openEMS)
-    print_status "OK" "openEMS found at: $OPENEMS_PATH"
+    print_status "OK" "openEMS binary found at: $OPENEMS_PATH"
 else
     print_status "FAIL" "openEMS binary not found in PATH"
 fi
 
-# 2. Check Python 3
-if command -v python3 &> /dev/null; then
-    PYTHON_VERSION=$(python3 --version 2>&1)
-    print_status "OK" "Python 3 installed: $PYTHON_VERSION"
+# 2. Check python executable
+if command -v python &> /dev/null; then
+    PYTHON_VERSION=$(python --version 2>&1)
+    PYTHON_PATH=$(command -v python)
+    print_status "OK" "python executable found: $PYTHON_VERSION (at $PYTHON_PATH)"
 else
-    print_status "FAIL" "python3 not found in PATH"
+    print_status "FAIL" "python executable not found in PATH"
 fi
 
-# 3. Check pip
-if command -v pip3 &> /dev/null; then
-    PIP_VERSION=$(pip3 --version 2>&1)
-    print_status "OK" "pip available: $PIP_VERSION"
-elif command -v pip &> /dev/null; then
+# 3. Check pip executable
+if command -v pip &> /dev/null; then
     PIP_VERSION=$(pip --version 2>&1)
-    print_status "OK" "pip available: $PIP_VERSION"
+    PIP_PATH=$(command -v pip)
+    print_status "OK" "pip executable found: $PIP_VERSION (at $PIP_PATH)"
 else
-    print_status "FAIL" "pip not found in PATH"
+    print_status "FAIL" "pip executable not found in PATH"
 fi
 
-# 4. Check LD_LIBRARY_PATH
+# 4. Verify python and pip are from same environment
+if command -v python &> /dev/null && command -v pip &> /dev/null; then
+    PYTHON_PATH=$(command -v python)
+    PIP_PATH=$(command -v pip)
+    PYTHON_DIR=$(dirname "$PYTHON_PATH")
+    PIP_DIR=$(dirname "$PIP_PATH")
+    
+    if [ "$PYTHON_DIR" = "$PIP_DIR" ]; then
+        print_status "OK" "python and pip resolve to same environment"
+    else
+        print_status "WARN" "python and pip from different locations (may cause issues)"
+    fi
+fi
+
+# 5. Check LD_LIBRARY_PATH
 if [[ "$LD_LIBRARY_PATH" == *"/usr/local/lib"* ]]; then
     print_status "OK" "LD_LIBRARY_PATH includes /usr/local/lib"
 else
-    print_status "WARN" "LD_LIBRARY_PATH does not include /usr/local/lib (may cause runtime failures)"
+    if [ -d "/usr/local/lib" ]; then
+        print_status "WARN" "LD_LIBRARY_PATH does not include /usr/local/lib (may cause runtime failures)"
+    else
+        print_status "WARN" "/usr/local/lib does not exist on system"
+    fi
 fi
 
 echo "" >> "$LOG_FILE"
