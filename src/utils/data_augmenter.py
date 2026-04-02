@@ -36,9 +36,10 @@ class SParamAugmenter:
         
         result_net = network_4p.copy()
         
+        from skrf.network import connect
         for port_idx, term_net in terminations:
             # Terminate securely using cascading connections natively supported by scikit-rf
-            result_net = rf.connect(result_net, port_idx, term_net, 0)
+            result_net = connect(result_net, port_idx, term_net, 0)
             
         return result_net
 
