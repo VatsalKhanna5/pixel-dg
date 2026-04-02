@@ -56,7 +56,7 @@ To evaluate this accurately without using computationally heavy simulations, a D
   * Top: `(7, 14)`
   * Bottom: `(7, 0)` 
 
-**Validation Rule**: If the DFS tree branching through adjoining horizontal/vertical grid elements successfully visits at least two of these predefined ports, the structure is deemed `Connected`. Otherwise, it is labeled an open circuit.
+**Validation Rule**: If the DFS tree branching through adjoining horizontal/vertical grid elements successfully visits from **Port 1 (Left)** directly to **Port 2 (Right)**, the structure is deemed `Connected`. Otherwise, it is labeled an open circuit for the purposes of $S_{21}$ wave propagation.
 
 ## 4. Coordinate Space Mapping
 

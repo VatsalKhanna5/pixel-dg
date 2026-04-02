@@ -27,44 +27,34 @@ class PixelLayoutGenerator:
     def check_dfs_connectivity(self, matrix: np.ndarray) -> bool:
         """
         Implement a Depth-First Search to verify connectivity.
-        The 4 ports connect at the centers of the edges: (0, 7), (14, 7), (7, 0), (7, 14).
-        
-        Returns:
-            bool: True if a continuous path of 1s connects at least two 
-                  of these exact port locations.
+        Strictly evaluates if a continuous path of 1s exists specifically between 
+        Port 1 (Left: 0, 7) and Port 2 (Right: 14, 7) for accurate S21 transmission.
         """
-        # Ensure targeted ports actually rest on conductor elements (1) internally before DFS mapping
-        active_ports = [p for p in self.port_locations if matrix[p] == 1]
+        p_in = (0, 7)
+        p_out = (14, 7)
         
-        if len(active_ports) < 2:
+        # If either primary port is missing metal, it can't transmit Left -> Right
+        if matrix[p_in] == 0 or matrix[p_out] == 0:
             return False
 
         visited = set()
+        stack = [p_in]
         
-        def dfs(start_node: Tuple[int, int]) -> set:
-            stack = [start_node]
-            component = set()
-            while stack:
-                r, c = stack.pop()
-                if (r, c) not in visited:
-                    visited.add((r, c))
-                    component.add((r, c))
-                    # Assess non-diagonal neighbor pixels
-                    for dr, dc in [(-1, 0), (1, 0), (0, -1), (0, 1)]:
-                        nr, nc = r + dr, c + dc
-                        if 0 <= nr < self.grid_size and 0 <= nc < self.grid_size:
-                            if matrix[nr, nc] == 1 and (nr, nc) not in visited:
-                                stack.append((nr, nc))
-            return component
-
-        for start_port in active_ports:
-            if start_port not in visited:
-                connected_component = dfs(start_port)
-                # Confirm we reach more than 1 port to constitute a connected two-port link geometry
-                ports_in_component = sum(1 for p in active_ports if p in connected_component)
-                if ports_in_component >= 2:
+        while stack:
+            r, c = stack.pop()
+            if (r, c) not in visited:
+                visited.add((r, c))
+                # If we've reached the output port, the path is complete
+                if (r, c) == p_out:
                     return True
                     
+                # Assess non-diagonal neighbor pixels
+                for dr, dc in [(-1, 0), (1, 0), (0, -1), (0, 1)]:
+                    nr, nc = r + dr, c + dc
+                    if 0 <= nr < self.grid_size and 0 <= nc < self.grid_size:
+                        if matrix[nr, nc] == 1 and (nr, nc) not in visited:
+                            stack.append((nr, nc))
+                            
         return False
 
     def generate_dataset(self, total_samples: int) -> Iterator[Tuple[np.ndarray, bool]]:
