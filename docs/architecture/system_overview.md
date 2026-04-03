@@ -1,68 +1,58 @@
-# System Architecture & Generation Logic
+# System Overview
 
-The generative system in **Pixel** handles the mathematical creation and graph-based validation of topologies representing printed circuit board (PCB) micro-traces.
+## Purpose
 
-## 1. Port Identification & Circuit Layout
+The system converts a compact binary geometry representation into simulation-backed RF response data. It is designed so that each stage remains conceptually separable: layout generation, connectivity screening, geometry construction, simulation, reduction, and storage.
 
-The framework strictly bounds microstrip layout paths within a $15 \times 15$ discretized coordinate map. Specifically, exactly 4 ports anchor the periphery of this map. Port connections provide the standard interface between FDTD energy injections and geometric routing lines.
+## Pipeline Structure
 
 ```mermaid
-graph TD
-    classDef port fill:#10A37F,stroke:#000,stroke-width:2px,color:#fff;
-    classDef substrate fill:#E8E8E8,stroke:#666,stroke-width:2px;
-    classDef trace fill:#F29C38,stroke:#C67D28,stroke-width:1px;
-    
-    subgraph 40x40mm Rogers Extended Base
-        direction TB
-        
-        P4((Port 4<br/>Top<br/>i=7, j=14)):::port
-        P1((Port 1<br/>Left<br/>i=0, j=7)):::port
-        Grid[15x15 Geometric Grid<br/>18x18mm Active Pixel Area]:::substrate
-        P2((Port 2<br/>Right<br/>i=14, j=7)):::port
-        P3((Port 3<br/>Bottom<br/>i=7, j=0)):::port
-        
-        P4 --- Grid
-        P1 --- Grid
-        Grid --- P2
-        Grid --- P3
-    end
+flowchart LR
+    A[Gaussian occupancy model] --> B[15 x 15 binary layout]
+    B --> C[DFS connectivity screening]
+    C --> D[Pixel-to-geometry mapping]
+    D --> E[openEMS simulation]
+    E --> F[Response tensor]
+    F --> G[Augmented 2-port variants]
+    G --> H[HDF5 dataset]
 ```
 
-### Reference: 50-Ohm Baseline Transmission Line
-A baseline calibration structure represents an uninterrupted, straight strip of metal connecting **Port 1 (Left)** directly to **Port 2 (Right)**.
-* **Layout Matrix Representation**: `matrix[:, 7] = 1`, meaning column `0-14` is entirely metallic at row index `7`.
-* **Behavior Characteristics**: Evaluated against standard characteristic impedance ($50\Omega$), demonstrating minimum Reflection $|S_{11}|$ and highly efficient Forward Transmission $|S_{21}|$ approaching $0 \text{ dB}$.
-* *Note: Run `verify_baseline.py` in the root directory to generate and capture this baseline structure visually as `baseline_layout.png` and `baseline_S_params.png`.*
+## Layout Convention
 
-## 2. Stochastic Generation Model
+The active design space is a `15 x 15` grid. Each element indicates whether conductive metal is present at that pixel location.
 
-The layouts are bounded inside a $15 \times 15$ continuous grid. To mimic clustered contiguous metal traces (rather than completely random salt-and-pepper noise), the `PixelLayoutGenerator` implements a continuous stochastic process.
+- grid size: `15`
+- pixel size: `1.2 mm`
+- overlap ratio: `10 percent`
 
-1. **Normal Distribution Base**: An underlying array of continuous values is generated using a Gaussian normal distribution: 
-   $$ \mathcal{N}(\mu=0.5, \sigma=0.15) $$
-2. **Bounds Clipping**: Matrix numbers are clamped strictly to $[0.0, 1.0]$.
-3. **Thresholding**: Values $\geq 0.5$ are categorized as $1$ (conductive metal), while values $< 0.5$ are categorized as $0$ (substrate dielectric). 
+Port convention:
 
-## 3. Graph Continuity & Depth-First Search (DFS)
+- left port: `(0, 7)`
+- right port: `(14, 7)`
+- bottom port: `(7, 0)`
+- top port: `(7, 14)`
 
-Since electromagnetic signals require physical propagation, topologies must be evaluated for continuity. A system generating purely random noise will mostly generate isolated metallic islands consisting of open circuits. 
+These conventions are set in the generator and simulator logic and form the basis of the connectivity and augmentation procedures.
 
-The framework systematically guarantees a strict dataset ratio: **80% Connected** vs **20% Disconnected** geometries. 
+## Connectivity Screening
 
-To evaluate this accurately without using computationally heavy simulations, a Depth-First Search (DFS) graph algorithm parses the binary grid array.
-* The system designates exactly 4 excitation interface indices correlating to the physical microstrip ports at the edges:
-  * Left: `(0, 7)`
-  * Right: `(14, 7)`
-  * Top: `(7, 14)`
-  * Bottom: `(7, 0)` 
+The generator in [`src/generators/matrix_generator.py`](/home/dr-robin-kalyan/Desktop/pixel/src/generators/matrix_generator.py) uses a normal distribution with thresholding to generate candidate layouts, then applies a depth-first search over four-neighbor adjacency. The implemented acceptance logic is centered on left-to-right reachability because that is the path used for the primary transmission screen.
 
-**Validation Rule**: If the DFS tree branching through adjoining horizontal/vertical grid elements successfully visits from **Port 1 (Left)** directly to **Port 2 (Right)**, the structure is deemed `Connected`. Otherwise, it is labeled an open circuit for the purposes of $S_{21}$ wave propagation.
+## Geometry Mapping
 
-## 4. Coordinate Space Mapping
+Each conductive pixel is mapped into a conductive box on top of the substrate. Pixel overlap is intentionally introduced so that logically adjacent metal cells remain physically continuous after meshing.
 
-Indices `(i, j)` natively exist from $[0, 14]$. To execute a physical geometry engine symmetric around an origin `(0,0)`, the grid undergoes an absolute geometric translation logic relying on the component feature dimension ($1.2\text{mm}$).
+Coordinate mapping:
 
-$$ C_x = (i - 7) \times 1.2\text{mm} $$
-$$ C_y = (j - 7) \times 1.2\text{mm} $$
+- `cx = (i - 7) * pixel_size`
+- `cy = (j - 7) * pixel_size`
 
-This mapping bridges the abstracted `numpy` array to the physical CSX geometry builder reliably.
+This places the active layout around the origin while preserving index semantics.
+
+## Baseline Reference Structure
+
+The baseline verification script defines a center-row conductive path between the left and right ports. This acts as the simplest reference geometry for checking whether the geometry builder and solver produce qualitatively sensible transmission behavior.
+
+## Design Intent
+
+The overall architecture is meant to support a physics-aware data generation workflow rather than a purely random synthetic dataset. The separation between generation, simulation, and reduction is therefore an important part of the system design and should be preserved as the repository evolves.
