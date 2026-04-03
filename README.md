@@ -1,6 +1,6 @@
-# Pixel
+# Pixel-dg
 
-Pixel is a research-oriented electromagnetic data generation pipeline for pixelated RF layouts intended for surrogate modeling workflows around Class-F power amplifier structures. The repository combines stochastic layout synthesis, openEMS-based FDTD simulation, post-processing for reduced-port network views, and archival storage for downstream machine learning analysis.
+Pixel-dg is a research-oriented electromagnetic data generation pipeline for pixelated RF layouts intended for surrogate modeling workflows around Class-F power amplifier structures. The repository combines stochastic layout synthesis, openEMS-based FDTD simulation, post-processing for reduced-port network views, and archival storage for downstream machine learning analysis.
 
 The project is organized around a simple principle: generated data should remain physically motivated, reproducible, and inspectable. The implementation reflects that goal through explicit geometry rules, bounded material parameters, deterministic connectivity checks, and documented verification artifacts.
 
