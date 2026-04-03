@@ -9,7 +9,7 @@ The project is organized around a simple principle: generated data should remain
 - **Problem domain:** rapid generation of simulation-backed RF layout data for data-driven design studies.
 - **Primary artifact:** binary `15 x 15` conductive pixel layouts mapped to openEMS simulations and archived as HDF5 datasets.
 - **Research relevance:** supports experimentation on how topology, connectivity, and termination conditions shape scattering responses used in surrogate-model development.
-- **Validation posture:** includes a baseline transmission-line check, exploratory data analysis notebooks, and exported verification figures under [`tests/`](/home/dr-robin-kalyan/Desktop/pixel/tests).
+- **Validation posture:** includes a baseline transmission-line check, exploratory data analysis notebooks, and exported verification figures under [`tests/`](tests/).
 
 ## Research Relevance
 
@@ -20,7 +20,7 @@ This repository is aligned with the workflow described in the project context fo
 3. It exposes topology and S-parameter distributions in forms suitable for audit before model training.
 4. It stores results in a machine-learning-friendly structure that can be used for CNN, GNN, or surrogate regression experiments.
 
-The project context and constraints are captured in [`AGENT_CONTEXT.md`](/home/dr-robin-kalyan/Desktop/pixel/AGENT_CONTEXT.md). A fuller research framing is documented in [`docs/research_relevance.md`](/home/dr-robin-kalyan/Desktop/pixel/docs/research_relevance.md).
+The project context and constraints are captured in [`AGENT_CONTEXT.md`](AGENT_CONTEXT.md). A fuller research framing is documented in [`docs/research_relevance.md`](docs/research_relevance.md).
 
 ## System Scope
 
@@ -35,10 +35,10 @@ The current repository implements the following end-to-end stages:
 
 Repository entry points:
 
-- [`scripts/generate_dataset_orchestrator.py`](/home/dr-robin-kalyan/Desktop/pixel/scripts/generate_dataset_orchestrator.py): sequential dataset generation and storage
-- [`scripts/generate_bulk_dataset.py`](/home/dr-robin-kalyan/Desktop/pixel/scripts/generate_bulk_dataset.py): checkpointed bulk generation with worker processes
-- [`scripts/run_20_cases.py`](/home/dr-robin-kalyan/Desktop/pixel/scripts/run_20_cases.py): small validation run across generated cases
-- [`tests/verify_baseline.py`](/home/dr-robin-kalyan/Desktop/pixel/tests/verify_baseline.py): baseline straight-trace verification
+- [`scripts/generate_dataset_orchestrator.py`](scripts/generate_dataset_orchestrator.py): sequential dataset generation and storage
+- [`scripts/generate_bulk_dataset.py`](scripts/generate_bulk_dataset.py): checkpointed bulk generation with worker processes
+- [`scripts/run_20_cases.py`](scripts/run_20_cases.py): small validation run across generated cases
+- [`tests/verify_baseline.py`](tests/verify_baseline.py): baseline straight-trace verification
 
 ## Architecture
 
@@ -79,9 +79,9 @@ flowchart TD
 
 Technical details are broken out in the docs set:
 
-- [`docs/architecture/system_overview.md`](/home/dr-robin-kalyan/Desktop/pixel/docs/architecture/system_overview.md): layout conventions, port placement, and generator logic.
-- [`docs/architecture/physics_engine.md`](/home/dr-robin-kalyan/Desktop/pixel/docs/architecture/physics_engine.md): substrate, meshing, air volume, and boundary-condition design choices.
-- [`docs/architecture/data_pipeline.md`](/home/dr-robin-kalyan/Desktop/pixel/docs/architecture/data_pipeline.md): reduction from simulated responses to augmented learning-ready tensors.
+- [`docs/architecture/system_overview.md`](docs/architecture/system_overview.md): layout conventions, port placement, and generator logic.
+- [`docs/architecture/physics_engine.md`](docs/architecture/physics_engine.md): substrate, meshing, air volume, and boundary-condition design choices.
+- [`docs/architecture/data_pipeline.md`](docs/architecture/data_pipeline.md): reduction from simulated responses to augmented learning-ready tensors.
 
 ## Data Products
 
@@ -93,11 +93,11 @@ The default sequential orchestrator writes to `data/processed/class_f_dataset.h5
 | `s_parameters` | `(N, 8, F, 2, 2)` | eight augmented 2-port variants per sample |
 | `dfs_status` | `(N,)` | connectivity label from graph screening |
 
-The bulk pipeline additionally stores `s_parameters_raw_4x4` in its aggregated output. A more complete storage description is in [`docs/dataset_specification.md`](/home/dr-robin-kalyan/Desktop/pixel/docs/dataset_specification.md).
+The bulk pipeline additionally stores `s_parameters_raw_4x4` in its aggregated output. A more complete storage description is in [`docs/dataset_specification.md`](docs/dataset_specification.md).
 
 ## Verification And Evaluation
 
-The repository already contains exported evaluation figures in [`tests/`](/home/dr-robin-kalyan/Desktop/pixel/tests). These should be treated as evidence artifacts accompanying the analysis notebooks, not decorative images.
+The repository already contains exported evaluation figures in [`tests/`](tests/). These should be treated as evidence artifacts accompanying the analysis notebooks, not decorative images.
 
 ### Verification Flow
 
@@ -136,7 +136,7 @@ This plot family shows how the simulated response population behaves across the 
 
 This artifact helps bridge RF verification and data-science readiness by checking whether the dataset appears stable, diverse, and structured enough for training workflows.
 
-The complete verification set, with contextual explanations for each figure, is documented in [`docs/verification_and_evaluation.md`](/home/dr-robin-kalyan/Desktop/pixel/docs/verification_and_evaluation.md).
+The complete verification set, with contextual explanations for each figure, is documented in [`docs/verification_and_evaluation.md`](docs/verification_and_evaluation.md).
 
 ## Getting Started
 
@@ -148,7 +148,7 @@ Python dependencies:
 pip install -r requirements.txt
 ```
 
-Solver prerequisites are described in [`docs/environment.md`](/home/dr-robin-kalyan/Desktop/pixel/docs/environment.md).
+Solver prerequisites are described in [`docs/environment.md`](docs/environment.md).
 
 ### Baseline Verification
 
@@ -180,15 +180,15 @@ python scripts/run_20_cases.py
 
 The documentation set is designed to be read in layers:
 
-- [`docs/README.md`](/home/dr-robin-kalyan/Desktop/pixel/docs/README.md): documentation hub and reading order
-- [`docs/research_relevance.md`](/home/dr-robin-kalyan/Desktop/pixel/docs/research_relevance.md): why the system matters for RF and surrogate-model studies
-- [`docs/architecture/system_overview.md`](/home/dr-robin-kalyan/Desktop/pixel/docs/architecture/system_overview.md): end-to-end system structure
-- [`docs/architecture/physics_engine.md`](/home/dr-robin-kalyan/Desktop/pixel/docs/architecture/physics_engine.md): simulation-domain design
-- [`docs/architecture/data_pipeline.md`](/home/dr-robin-kalyan/Desktop/pixel/docs/architecture/data_pipeline.md): transformation into ML-ready datasets
-- [`docs/dataset_specification.md`](/home/dr-robin-kalyan/Desktop/pixel/docs/dataset_specification.md): stored tensors, semantics, and provenance
-- [`docs/verification_and_evaluation.md`](/home/dr-robin-kalyan/Desktop/pixel/docs/verification_and_evaluation.md): baseline checks, notebooks, and figure interpretation
-- [`docs/operations.md`](/home/dr-robin-kalyan/Desktop/pixel/docs/operations.md): execution paths, outputs, and operational notes
-- [`docs/environment.md`](/home/dr-robin-kalyan/Desktop/pixel/docs/environment.md): solver and Python environment setup
+- [`docs/README.md`](docs/README.md): documentation hub and reading order
+- [`docs/research_relevance.md`](docs/research_relevance.md): why the system matters for RF and surrogate-model studies
+- [`docs/architecture/system_overview.md`](docs/architecture/system_overview.md): end-to-end system structure
+- [`docs/architecture/physics_engine.md`](docs/architecture/physics_engine.md): simulation-domain design
+- [`docs/architecture/data_pipeline.md`](docs/architecture/data_pipeline.md): transformation into ML-ready datasets
+- [`docs/dataset_specification.md`](docs/dataset_specification.md): stored tensors, semantics, and provenance
+- [`docs/verification_and_evaluation.md`](docs/verification_and_evaluation.md): baseline checks, notebooks, and figure interpretation
+- [`docs/operations.md`](docs/operations.md): execution paths, outputs, and operational notes
+- [`docs/environment.md`](docs/environment.md): solver and Python environment setup
 
 ## Notes On Repository Status
 
