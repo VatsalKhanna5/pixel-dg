@@ -21,7 +21,7 @@ The simulator returns a complex array with the shape:
 
 `(frequency, port, port)`
 
-This tensor is then passed to the augmentation logic in [`src/utils/data_augmenter.py`](/home/dr-robin-kalyan/Desktop/pixel/src/utils/data_augmenter.py).
+This tensor is then passed to the augmentation logic in [`src/utils/data_augmenter.py`](../../src/utils/data_augmenter.py).
 
 ## Port Reduction
 

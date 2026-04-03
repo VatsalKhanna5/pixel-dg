@@ -10,7 +10,7 @@ Default path:
 
 `data/processed/class_f_dataset.h5`
 
-Datasets created by [`scripts/generate_dataset_orchestrator.py`](/home/dr-robin-kalyan/Desktop/pixel/scripts/generate_dataset_orchestrator.py):
+Datasets created by [`scripts/generate_dataset_orchestrator.py`](../scripts/generate_dataset_orchestrator.py):
 
 | Dataset | Shape | Type | Description |
 | --- | --- | --- | --- |
@@ -29,7 +29,7 @@ Default path:
 
 `data/processed/final_dataset.h5`
 
-Datasets created by [`scripts/generate_bulk_dataset.py`](/home/dr-robin-kalyan/Desktop/pixel/scripts/generate_bulk_dataset.py):
+Datasets created by [`scripts/generate_bulk_dataset.py`](../scripts/generate_bulk_dataset.py):
 
 | Dataset | Shape | Type | Description |
 | --- | --- | --- | --- |
@@ -40,7 +40,7 @@ Datasets created by [`scripts/generate_bulk_dataset.py`](/home/dr-robin-kalyan/D
 
 ## Frequency Definition
 
-The current configuration file [`configs/config.yaml`](/home/dr-robin-kalyan/Desktop/pixel/configs/config.yaml) defines:
+The current configuration file [`configs/config.yaml`](../configs/config.yaml) defines:
 
 - `freq_start_ghz: 2.0`
 - `freq_stop_ghz: 10.0`
@@ -53,7 +53,7 @@ This produces 21 analysis points across the three target bands.
 
 - Layout tensors encode geometry in matrix form, not mesh form.
 - `dfs_status` is a graph-theoretic label, not a direct EM metric.
-- `s_parameters` represent reduced-port variants derived from the solver output through the augmentation logic in [`src/utils/data_augmenter.py`](/home/dr-robin-kalyan/Desktop/pixel/src/utils/data_augmenter.py).
+- `s_parameters` represent reduced-port variants derived from the solver output through the augmentation logic in [`src/utils/data_augmenter.py`](../src/utils/data_augmenter.py).
 - Bulk generation preserves a raw `4 x 4`-shaped tensor for future analysis or alternative reduction methods.
 
 ## Provenance Recommendations

@@ -2,11 +2,11 @@
 
 ## Overview
 
-The simulation core is implemented in [`src/simulators/openems_simulator.py`](/home/dr-robin-kalyan/Desktop/pixel/src/simulators/openems_simulator.py) and uses openEMS together with CSXCAD to build and solve a three-dimensional FDTD problem for each accepted layout.
+The simulation core is implemented in [`src/simulators/openems_simulator.py`](../../src/simulators/openems_simulator.py) and uses openEMS together with CSXCAD to build and solve a three-dimensional FDTD problem for each accepted layout.
 
 ## Material And Geometry Parameters
 
-From [`configs/config.yaml`](/home/dr-robin-kalyan/Desktop/pixel/configs/config.yaml):
+From [`configs/config.yaml`](../../configs/config.yaml):
 
 - substrate material: `Rogers 4350B`
 - substrate thickness: `0.508 mm`

@@ -39,8 +39,8 @@ If the command succeeds, the core solver bindings are visible to Python.
 
 After import verification:
 
-1. run [`tests/verify_baseline.py`](/home/dr-robin-kalyan/Desktop/pixel/tests/verify_baseline.py)
-2. run a small dataset job with [`scripts/generate_dataset_orchestrator.py`](/home/dr-robin-kalyan/Desktop/pixel/scripts/generate_dataset_orchestrator.py)
+1. run [`tests/verify_baseline.py`](../tests/verify_baseline.py)
+2. run a small dataset job with [`scripts/generate_dataset_orchestrator.py`](../scripts/generate_dataset_orchestrator.py)
 3. review the generated outputs before scaling further
 
 ## Environment Risks To Watch

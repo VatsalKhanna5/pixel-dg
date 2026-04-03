@@ -96,8 +96,8 @@ flowchart TD
 
 ## Recommended Run Order For A Fresh Clone
 
-1. Validate solver imports using [`environment.md`](/home/dr-robin-kalyan/Desktop/pixel/docs/environment.md).
-2. Run [`tests/verify_baseline.py`](/home/dr-robin-kalyan/Desktop/pixel/tests/verify_baseline.py).
+1. Validate solver imports using [`environment.md`](environment.md).
+2. Run [`tests/verify_baseline.py`](../tests/verify_baseline.py).
 3. Run a small sequential dataset job.
-4. Review the output with the notebooks in [`tests/`](/home/dr-robin-kalyan/Desktop/pixel/tests).
+4. Review the output with the notebooks in [`tests/`](../tests/).
 5. Move to bulk generation only after the baseline and small-run outputs look credible.

@@ -11,7 +11,7 @@ The repository follows a layered verification approach:
 
 ## Baseline Verification
 
-The baseline script [`tests/verify_baseline.py`](/home/dr-robin-kalyan/Desktop/pixel/tests/verify_baseline.py) constructs a straight conductive trace connecting the left and right ports through the center row of the `15 x 15` grid. Its intent is to provide a simple sanity check for geometry construction and basic transmission behavior.
+The baseline script [`tests/verify_baseline.py`](../tests/verify_baseline.py) constructs a straight conductive trace connecting the left and right ports through the center row of the `15 x 15` grid. Its intent is to provide a simple sanity check for geometry construction and basic transmission behavior.
 
 Expected qualitative outcome:
 
@@ -23,8 +23,8 @@ Expected qualitative outcome:
 
 The `tests` directory contains notebooks and exported figures that document dataset quality and interpretability:
 
-- [`tests/Samples_EDA.ipynb`](/home/dr-robin-kalyan/Desktop/pixel/tests/Samples_EDA.ipynb): sample-oriented exploratory analysis
-- [`tests/class_f_pa_eda_5000.ipynb`](/home/dr-robin-kalyan/Desktop/pixel/tests/class_f_pa_eda_5000.ipynb): larger population-level analysis
+- [`tests/Samples_EDA.ipynb`](../tests/Samples_EDA.ipynb): sample-oriented exploratory analysis
+- [`tests/class_f_pa_eda_5000.ipynb`](../tests/class_f_pa_eda_5000.ipynb): larger population-level analysis
 
 ## Exported Figure Set
 

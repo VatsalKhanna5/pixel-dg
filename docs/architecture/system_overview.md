@@ -36,7 +36,7 @@ These conventions are set in the generator and simulator logic and form the basi
 
 ## Connectivity Screening
 
-The generator in [`src/generators/matrix_generator.py`](/home/dr-robin-kalyan/Desktop/pixel/src/generators/matrix_generator.py) uses a normal distribution with thresholding to generate candidate layouts, then applies a depth-first search over four-neighbor adjacency. The implemented acceptance logic is centered on left-to-right reachability because that is the path used for the primary transmission screen.
+The generator in [`src/generators/matrix_generator.py`](../../src/generators/matrix_generator.py) uses a normal distribution with thresholding to generate candidate layouts, then applies a depth-first search over four-neighbor adjacency. The implemented acceptance logic is centered on left-to-right reachability because that is the path used for the primary transmission screen.
 
 ## Geometry Mapping
 
